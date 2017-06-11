@@ -1,4 +1,4 @@
-#levelsBot
+# levelsBot 0.9
 
 A Discord bot written in Python 3.5.2, that allows you to give users stars (or levels).
 
