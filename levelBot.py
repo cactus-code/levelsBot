@@ -12,8 +12,18 @@ content = [x.strip('\n') for x in content]
 d = dict(itertools.zip_longest(*[iter(content)] * 2, fillvalue=""))
 player_stars.update(d)
 
-token = "MzIzNjg0MTUwMjIzNTY4OTA3.DB-ycQ.tPO2xSw9qpXqPmVE5dGSUYkoVfw"
+token = "token here"
 game = "Shooting Stars"
+
+def check_for_role(ctx):
+    user_role = discord.utils.get(ctx.message.server.roles, name="Starlord")
+    author_roles = (ctx.message.author).roles
+    run = False
+    for role in author_roles:
+        if role == user_role:
+            run = True
+            break
+    return run
 
 @level_bot.event
 async def on_ready():
@@ -27,29 +37,31 @@ async def on_ready():
 
 @level_bot.event
 async def on_server_join(server):
-    global user_role
-    user_role = discord.utils.get(server.roles, name="Starlord")
     await level_bot.send_message(server.default_channel,"Greatings, I am a bot. My purpose as a bot is to track user's 'stars' or levels. Stars can only be allocated by people with the 'Starlord' role. A full list of commands can be obtained through the '?help' command. Have fun!")
     await level_bot.create_role(server,name="Starlord",colour=discord.Colour.gold(),hoist=False,mentionable=True)
     
 @level_bot.command(pass_context=True)
 async def give_stars(ctx,*args):
-    global player_stars
-    num = 0
-    if int(args[1]) >= 0:
-        operator = "+"
-    elif int(args[1]) < 0:
-        operator = ""
-    for key in player_stars:
-        if key == args[0]:
-            num = num + 1
-            player_stars[key] = int(player_stars[key]) + int(args[1])
-            await level_bot.send_message(ctx.message.channel, 'User "{}" now has {} :stars: ({}{}).'.format(key,player_stars[key],operator,args[1]))
-    if num == 0:
-        user = str(args[0])
-        stars = 0 + int(args[1])
-        player_stars[user] = stars
-        await level_bot.send_message(ctx.message.channel, 'User "{}" was added to the list with {} :stars: (+{}).'.format(args[0],args[1],args[1]))
+    run = check_for_role(ctx)
+    if run == True:
+        global player_stars
+        num = 0
+        if int(args[1]) >= 0:
+            operator = "+"
+        elif int(args[1]) < 0:
+            operator = ""
+        for key in player_stars:
+            if key == args[0]:
+                num = num + 1
+                player_stars[key] = int(player_stars[key]) + int(args[1])
+                await level_bot.send_message(ctx.message.channel, 'User "{}" now has {} :stars: ({}{}).'.format(key,player_stars[key],operator,args[1]))
+        if num == 0:
+            user = str(args[0])
+            stars = 0 + int(args[1])
+            player_stars[user] = stars
+            await level_bot.send_message(ctx.message.channel, 'User "{}" was added to the list with {} :stars: (+{}).'.format(args[0],args[1],args[1]))
+    else:
+        await level_bot.send_message(ctx.message.author, 'You do not have permission to interact with user stars in server "{}".'.format(ctx.message.server))
 
 @level_bot.command(pass_context=True)
 async def list_stars(ctx,*args):
