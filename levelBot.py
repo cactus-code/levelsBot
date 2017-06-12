@@ -12,7 +12,7 @@ content = [x.strip('\n') for x in content]
 d = dict(itertools.zip_longest(*[iter(content)] * 2, fillvalue=""))
 player_stars.update(d)
 
-token = "token here"
+token = "bot token here"
 game = "Shooting Stars"
 
 def check_for_role(ctx):
@@ -42,6 +42,7 @@ async def on_server_join(server):
     
 @level_bot.command(pass_context=True)
 async def give_stars(ctx,*args):
+    await level_bot.delete_message(ctx.message)
     run = check_for_role(ctx)
     if run == True:
         global player_stars
@@ -65,6 +66,7 @@ async def give_stars(ctx,*args):
 
 @level_bot.command(pass_context=True)
 async def list_stars(ctx,*args):
+    await level_bot.delete_message(ctx.message)
     try:
         if len(player_stars) is not 0:
             for key in player_stars:
@@ -84,29 +86,39 @@ async def list_stars(ctx,*args):
         
 @level_bot.command(pass_context=True)
 async def clear_stars(ctx,*args):
-    global player_stars
-    if args[0].lower() == "all":
-        del player_stars
-        player_stars = {}
-        await level_bot.send_message(ctx.message.channel, 'Deleted :stars: for all users.')
+    await level_bot.delete_message(ctx.message)
+    run = check_for_role(ctx)
+    if run == True:
+        global player_stars
+        if args[0].lower() == "all":
+            del player_stars
+            player_stars = {}
+            await level_bot.send_message(ctx.message.channel, 'Deleted :stars: for all users.')
+        else:
+            try:
+                del player_stars[args[0]]
+                await level_bot.send_message(ctx.message.channel, 'Deleted :stars: for user "{}".'.format(args[0]))
+            except:
+                await level_bot.send_message(ctx.message.channel, 'User "{}" was not found.'.format(args[0]))
     else:
-        try:
-            del player_stars[args[0]]
-            await level_bot.send_message(ctx.message.channel, 'Deleted :stars: for user "{}".'.format(args[0]))
-        except:
-            await level_bot.send_message(ctx.message.channel, 'User "{}" was not found.'.format(args[0]))
+        await level_bot.send_message(ctx.message.author, 'You do not have permission to interact with user stars in server "{}".'.format(ctx.message.server))
 
 @level_bot.command(pass_context=True)
 async def shutdown(ctx):
-    with open("stars.txt","w") as file:
-        for key in player_stars:
-            new_line = "\n"
-            file.write(str(key))
-            file.write(new_line)
-            file.write(str(player_stars[key]))
-            file.write(new_line)
-    await level_bot.send_message(ctx.message.channel, 'Closed bot and backed up all stars to "stars.txt".')
-    await level_bot.close()
+    await level_bot.delete_message(ctx.message)
+    run = check_for_role(ctx)
+    if run == True:
+        with open("stars.txt","w") as file:
+            for key in player_stars:
+                new_line = "\n"
+                file.write(str(key))
+                file.write(new_line)
+                file.write(str(player_stars[key]))
+                file.write(new_line)
+        await level_bot.send_message(ctx.message.channel, 'Closed bot and backed up all stars to "stars.txt".')
+        await level_bot.close()
+    else:
+        await level_bot.send_message(ctx.message.author, 'You do not have permission to interact with user stars in server "{}".'.format(ctx.message.server))
 
 @level_bot.event
 async def on_message(message):
