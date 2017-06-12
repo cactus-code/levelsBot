@@ -12,7 +12,7 @@ content = [x.strip('\n') for x in content]
 d = dict(itertools.zip_longest(*[iter(content)] * 2, fillvalue=""))
 player_stars.update(d)
 
-token = "MzEzNzczNjQ1Mjk2MzA0MTI4.C_wkBg.ee0Btf1Hdbu6mjhxlUv6HJ8X8_A"
+token = "MzIzNjg0MTUwMjIzNTY4OTA3.DB-ycQ.tPO2xSw9qpXqPmVE5dGSUYkoVfw"
 game = "Shooting Stars"
 
 @level_bot.event
@@ -25,6 +25,13 @@ async def on_ready():
     print('Playing:{}'.format(game))
     await level_bot.change_presence(game=discord.Game(name=game))
 
+@level_bot.event
+async def on_server_join(server):
+    global user_role
+    user_role = discord.utils.get(server.roles, name="Starlord")
+    await level_bot.send_message(server.default_channel,"Greatings, I am a bot. My purpose as a bot is to track user's 'stars' or levels. Stars can only be allocated by people with the 'Starlord' role. A full list of commands can be obtained through the '?help' command. Have fun!")
+    await level_bot.create_role(server,name="Starlord",colour=discord.Colour.gold(),hoist=False,mentionable=True)
+    
 @level_bot.command(pass_context=True)
 async def give_stars(ctx,*args):
     global player_stars
@@ -46,20 +53,22 @@ async def give_stars(ctx,*args):
 
 @level_bot.command(pass_context=True)
 async def list_stars(ctx,*args):
-    if len(player_stars) is not 0:
-        for key in player_stars:
-            if key == args[0]:
-                await level_bot.send_message(ctx.message.channel, 'User "{}" has {} :stars:.'.format(key,player_stars[key]))
-                break
-            else:
-                message = ctx.message.content
-                user = message.replace('?list_stars ','')
-                await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
-                break
-    elif len(player_stars) is 0:
-        message = ctx.message.content
-        user = message.replace('?list_stars ','')
-        await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
+    try:
+        if len(player_stars) is not 0:
+            for key in player_stars:
+                if key == args[0]:
+                    await level_bot.send_message(ctx.message.channel, 'User "{}" has {} :stars:.'.format(key,player_stars[key]))
+                    break
+                else:
+                    user = args[0]
+                    await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
+                    break
+        elif len(player_stars) is 0:
+            message = ctx.message.content
+            user = message.replace('?list_stars ','')
+            await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
+    except:
+        await level_bot.send_message(ctx.message.channel, 'User was not given. Please give the user after the "?list_stars" command.')
         
 @level_bot.command(pass_context=True)
 async def clear_stars(ctx,*args):
@@ -67,11 +76,13 @@ async def clear_stars(ctx,*args):
     if args[0].lower() == "all":
         del player_stars
         player_stars = {}
-        await level_bot.send_message(ctx.message.channel, 'Deleted stars for all users.')
+        await level_bot.send_message(ctx.message.channel, 'Deleted :stars: for all users.')
     else:
-        del player_stars[args[0]]
-        await level_bot.send_message(ctx.message.channel, 'Deleted stars for user "{}".'.format(args[0]))
-#await level_bot.send_message(ctx.message.channel, 'User "{}" was not found.'.format(args[0]))
+        try:
+            del player_stars[args[0]]
+            await level_bot.send_message(ctx.message.channel, 'Deleted :stars: for user "{}".'.format(args[0]))
+        except:
+            await level_bot.send_message(ctx.message.channel, 'User "{}" was not found.'.format(args[0]))
 
 @level_bot.command(pass_context=True)
 async def shutdown(ctx):
