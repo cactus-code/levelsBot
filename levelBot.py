@@ -18,12 +18,7 @@ game = "Shooting Stars"
 def check_for_role(ctx):
     user_role = discord.utils.get(ctx.message.server.roles, name="Starlord")
     author_roles = (ctx.message.author).roles
-    run = False
-    for role in author_roles:
-        if role == user_role:
-            run = True
-            break
-    return run
+    return any(role == user_role for role in author_roles)
 
 @level_bot.event
 async def on_ready():
