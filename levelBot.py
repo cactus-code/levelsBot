@@ -1,4 +1,5 @@
 import itertools
+import sys
 import discord
 from discord.ext.commands import Bot
 
@@ -89,11 +90,9 @@ async def list_stars(ctx,*args):
             for key in player_stars:
                 if key == args[0]:
                     await level_bot.send_message(ctx.message.channel, 'User "{}" has {} :stars:.'.format(key,player_stars[key]))
-                    break
-                else:
-                    user = args[0]
-                    await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
-                    break
+                    return None
+            user = args[0]
+            await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
         elif len(player_stars) is 0:
             message = ctx.message.content
             user = message.replace('?list_stars ','')
