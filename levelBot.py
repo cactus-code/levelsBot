@@ -62,22 +62,25 @@ async def give_stars(ctx,*args):
     await level_bot.delete_message(ctx.message)
     run = check_for_role(ctx)
     if run:
-        global player_stars
-        num = 0
-        if int(args[1]) >= 0:
-            operator = "+"
-        elif int(args[1]) < 0:
-            operator = ""
-        for key in player_stars:
-            if key == args[0]:
-                num = num + 1
-                player_stars[key] = int(player_stars[key]) + int(args[1])
-                await level_bot.send_message(ctx.message.channel, 'User "{}" now has {} :stars: ({}{}).'.format(key,player_stars[key],operator,args[1]))
-        if num == 0:
-            user = str(args[0])
-            stars = 0 + int(args[1])
-            player_stars[user] = stars
-            await level_bot.send_message(ctx.message.channel, 'User "{}" was added to the list with {} :stars: (+{}).'.format(args[0],args[1],args[1]))
+        try:
+            global player_stars
+            num = 0
+            if int(args[1]) >= 0:
+                operator = "+"
+            elif int(args[1]) < 0:
+              operator = ""
+            for key in player_stars:
+                if key == args[0]:
+                    num = num + 1
+                    player_stars[key] = int(player_stars[key]) + int(args[1])
+                    await level_bot.send_message(ctx.message.channel, 'User "{}" now has {} :stars: ({}{}).'.format(key,player_stars[key],operator,args[1]))
+            if num == 0:
+                user = str(args[0])
+                stars = 0 + int(args[1])
+                player_stars[user] = stars
+                await level_bot.send_message(ctx.message.channel, 'User "{}" was added to the list with {} :stars: (+{}).'.format(args[0],args[1],args[1]))
+        except:
+            await level_bot.send_message(ctx.message.channel, 'Invalid number. Please enter a valid user and a number of stars.')
     else:
         await level_bot.send_message(ctx.message.author, 'You do not have permission to interact with user stars in server "{}".'.format(ctx.message.server))
 
