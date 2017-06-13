@@ -12,7 +12,7 @@ content = [x.strip('\n') for x in content]
 d = dict(itertools.zip_longest(*[iter(content)] * 2, fillvalue=""))
 player_stars.update(d)
 
-token = "bot token here"
+token = input("Bot token here: ")
 game = "Shooting Stars"
 
 def check_for_role(ctx):
@@ -44,7 +44,7 @@ async def on_server_join(server):
 async def backup(ctx):
     await level_bot.delete_message(ctx.message)
     run = check_for_role(ctx)
-    if run == True:
+    if run:
         with open("stars.txt","w") as file:
             for key in player_stars:
                 new_line = "\n"
@@ -61,7 +61,7 @@ async def backup(ctx):
 async def give_stars(ctx,*args):
     await level_bot.delete_message(ctx.message)
     run = check_for_role(ctx)
-    if run == True:
+    if run:
         global player_stars
         num = 0
         if int(args[1]) >= 0:
@@ -103,7 +103,7 @@ async def list_stars(ctx,*args):
 async def clear_stars(ctx,*args):
     await level_bot.delete_message(ctx.message)
     run = check_for_role(ctx)
-    if run == True:
+    if run:
         global player_stars
         if args[0].lower() == "all":
             del player_stars
@@ -122,7 +122,7 @@ async def clear_stars(ctx,*args):
 async def shutdown(ctx):
     await level_bot.delete_message(ctx.message)
     run = check_for_role(ctx)
-    if run == True:
+    if run:
         with open("stars.txt","w") as file:
             for key in player_stars:
                 new_line = "\n"
