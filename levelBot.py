@@ -1,5 +1,4 @@
 import itertools
-import sys
 import discord
 from discord.ext.commands import Bot
 
