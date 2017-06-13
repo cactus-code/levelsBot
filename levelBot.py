@@ -39,6 +39,23 @@ async def on_ready():
 async def on_server_join(server):
     await level_bot.send_message(server.default_channel,"Greatings, I am a bot. My purpose as a bot is to track user's 'stars' or levels. Stars can only be allocated by people with the 'Starlord' role. A full list of commands can be obtained through the '?help' command. Have fun!")
     await level_bot.create_role(server,name="Starlord",colour=discord.Colour.gold(),hoist=False,mentionable=True)
+
+@level_bot.command(pass_context=True)
+async def backup(ctx):
+    await level_bot.delete_message(ctx.message)
+    run = check_for_role(ctx)
+    if run == True:
+        with open("stars.txt","w") as file:
+            for key in player_stars:
+                new_line = "\n"
+                file.write(str(key))
+                file.write(new_line)
+                file.write(str(player_stars[key]))
+                file.write(new_line)
+        await level_bot.send_message(ctx.message.channel, 'Backed up all user stars to "stars.txt".')
+    else:
+        await level_bot.send_message(ctx.message.author, 'You do not have permission to backup stars for this server "{}".'.format(ctx.message.server))
+        
     
 @level_bot.command(pass_context=True)
 async def give_stars(ctx,*args):
@@ -118,7 +135,7 @@ async def shutdown(ctx):
         await level_bot.send_message(ctx.message.channel, 'Closed bot and backed up all stars to "stars.txt".')
         await level_bot.close()
     else:
-        await level_bot.send_message(ctx.message.author, 'You do not have permission to interact with user stars in server "{}".'.format(ctx.message.server))
+        await level_bot.send_message(ctx.message.author, 'You do not have permission to shutdown this bot in server "{}".'.format(ctx.message.server))
 
 @level_bot.event
 async def on_message(message):
