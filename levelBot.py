@@ -12,7 +12,7 @@ content = [x.strip('\n') for x in content]
 d = dict(itertools.zip_longest(*[iter(content)] * 2, fillvalue=""))
 player_stars.update(d)
 
-token = input("Bot token here: ")
+token = "bot token here"
 game = "Shooting Stars"
 
 def check_for_role(ctx):
