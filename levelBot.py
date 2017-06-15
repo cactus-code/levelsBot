@@ -89,7 +89,7 @@ async def list_stars(ctx,*args):
                     return None
             user = args[0]
             await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
-        elif not player_stars:
+        else:
             message = ctx.message.content
             user = message.replace('?list_stars ','')
             await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
