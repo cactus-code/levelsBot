@@ -82,14 +82,14 @@ async def give_stars(ctx,*args):
 async def list_stars(ctx,*args):
     await level_bot.delete_message(ctx.message)
     try:
-        if len(player_stars) is not 0:
+        if player_stars:
             for key in player_stars:
                 if key == args[0]:
                     await level_bot.send_message(ctx.message.channel, 'User "{}" has {} :stars:.'.format(key,player_stars[key]))
                     return None
             user = args[0]
             await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
-        elif len(player_stars) is 0:
+        elif not player_stars:
             message = ctx.message.content
             user = message.replace('?list_stars ','')
             await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
