@@ -78,23 +78,31 @@ async def give_stars(ctx,*args):
     else:
         await level_bot.send_message(ctx.message.author, 'You do not have permission to interact with user stars in server "{}".'.format(ctx.message.server))
 
-@level_bot.command(pass_context=True)
+@leevel_bot.command(pass_context=True)
 async def list_stars(ctx,*args):
     await level_bot.delete_message(ctx.message)
     try:
         if player_stars:
-            for key in player_stars:
-                if key == args[0]:
-                    await level_bot.send_message(ctx.message.channel, 'User "{}" has {} :stars:.'.format(key,player_stars[key]))
-                    return None
-            user = args[0]
-            await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
+            if args[0].lower() == "all":
+                await level_bot.send_message(ctx.message.author,'Stars for server {}:'.format(ctx.message.server))
+                for key in player_stars:
+                    await level_bot.send_message(ctx.message.author,key + ' : ' + player_stars[key])
+            else:
+                for key in player_stars:
+                    if key == args[0]:
+                        await level_bot.send_message(ctx.message.channel, 'User "{}" has {} :stars:.'.format(key,player_stars[key]))
+                        return None
+                user = args[0]
+                await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
         else:
-            message = ctx.message.content
-            user = message.replace('?list_stars ','')
-            await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
+            if args[0].lower() == "all":
+                await level_bot.send_message(ctx.message.author, 'There are no users on the star list for server {}.'.format(ctx.message.server))
+            else:
+                message = ctx.message.content
+                user = message.replace('?list_stars ','')
+                await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
     except:
-        await level_bot.send_message(ctx.message.channel, 'User was not given. Please give the user after the "?list_stars" command.')
+        await level_bot.send_message(ctx.message.channel, 'User was not given. Please specify the user after the "?list_stars" command. Alternatively you can type "?list_stars all" to see the full star list for that server.')
         
 @level_bot.command(pass_context=True)
 async def clear_stars(ctx,*args):
