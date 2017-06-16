@@ -78,7 +78,7 @@ async def give_stars(ctx,*args):
     else:
         await level_bot.send_message(ctx.message.author, 'You do not have permission to interact with user stars in server "{}".'.format(ctx.message.server))
 
-@leevel_bot.command(pass_context=True)
+@level_bot.command(pass_context=True)
 async def list_stars(ctx,*args):
     await level_bot.delete_message(ctx.message)
     try:
