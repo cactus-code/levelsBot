@@ -68,7 +68,7 @@ async def give_stars(ctx,*args):
                     num = num + 1
                     player_stars[key] = int(player_stars[key]) + int(args[1])
                     await level_bot.send_message(ctx.message.channel, 'User "{}" now has {} :stars: ({}{}).'.format(key,player_stars[key],operator,args[1]))
-                    print("Gave a player {}{} stars").format(operator,args)
+                    print("Gave a player {}{} stars").format(operator,args[1])
             if num == 0:
                 user = str(args[0])
                 stars = 0 + int(args[1])
