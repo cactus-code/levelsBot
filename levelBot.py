@@ -48,7 +48,7 @@ async def backup(ctx):
                 file.write(str(player_stars[key]))
                 file.write(new_line)
         await level_bot.send_message(ctx.message.channel, 'Backed up all user stars to "stars.txt".')
-        print('Backed up all user stars for server {} to "stars.txt".'.format(ctx.message.server))
+        print('Backed up all user stars for server "{}" to "stars.txt".'.format(ctx.message.server))
     else:
         await level_bot.send_message(ctx.message.author, 'You do not have permission to backup stars for this server "{}".'.format(ctx.message.server))
         
@@ -69,13 +69,13 @@ async def give_stars(ctx,*args):
                     num = num + 1
                     player_stars[key] = int(player_stars[key]) + int(args[1])
                     await level_bot.send_message(ctx.message.channel, 'User "{}" now has {} :stars: ({}{}).'.format(key,player_stars[key],operator,args[1]))
-                    print("Gave {}{} stars to user with ID: {}".format(operator,args[1],args[0]))
+                    print('Gave "{}{}" stars to user with ID: "{}", on server: "{}".'.format(operator,args[1],args[0],ctx.message.server))
             if num == 0:
                 user = str(args[0])
                 stars = 0 + int(args[1])
                 player_stars[user] = stars
                 await level_bot.send_message(ctx.message.channel, 'User "{}" was added to the list with {} :stars: (+{}).'.format(args[0],args[1],args[1]))
-                print('Added user with ID: {} to star list with {} stars.'.format(args[0],args[1]))
+                print('Added user with ID: "{}" to star list with "{}" stars, on server: "{}".'.format(args[0],args[1],ctx.message.server))
         except:
             await level_bot.send_message(ctx.message.channel, 'Invalid number. Please enter a valid user and a number of stars.')
     else:
@@ -90,12 +90,12 @@ async def list_stars(ctx,*args):
                 await level_bot.send_message(ctx.message.author,'Stars for server {}:'.format(ctx.message.server))
                 for key in player_stars:
                     await level_bot.send_message(ctx.message.author,key + ' : ' + player_stars[key])
-                    print('Sent list of all user stars for server: {} to user: {}.'.format(ctx.message.server,ctx.message.author))
+                print('Sent list of all user stars for server: {} to user: {}.'.format(ctx.message.server,ctx.message.author))
             else:
                 for key in player_stars:
                     if key == args[0]:
                         await level_bot.send_message(ctx.message.channel, 'User "{}" has {} :stars:.'.format(key,player_stars[key]))
-                        print('Sent number of stars for user with ID: {} to server: {}.'.format(args[0],ctx.message.server))
+                        print('Sent number of stars for user with ID: "{}" on server: "{}", to text channel "{}".'.format(args[0],ctx.message.server,ctx.message.channel))
                         return None
                 user = args[0]
                 await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
@@ -119,12 +119,12 @@ async def clear_stars(ctx,*args):
             del player_stars
             player_stars = {}
             await level_bot.send_message(ctx.message.channel, 'Deleted :stars: for all users.')
-            print('Deleted stars for all users on server: {}.'.format(ctx.message.server))
+            print('Deleted stars for all users on server: "{}".'.format(ctx.message.server))
         else:
             try:
                 del player_stars[args[0]]
                 await level_bot.send_message(ctx.message.channel, 'Deleted :stars: for user "{}".'.format(args[0]))
-                print('Deleted stars for user with ID: {} on server: {}.'.format(args[0],ctx.message.server))
+                print('Deleted stars for user with ID: "{}" on server: "{}".'.format(args[0],ctx.message.server))
             except:
                 await level_bot.send_message(ctx.message.channel, 'User "{}" was not found.'.format(args[0]))
     else:
