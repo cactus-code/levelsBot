@@ -26,8 +26,6 @@ def get_username(ctx,key):
     key = key.replace('>','')
     user_name = discord.utils.get(ctx.message.server.members, id=key)
     return user_name
- #   user_name = discord.utils.get()
- #   print(user_name)
 
 @level_bot.event
 async def on_ready():
@@ -59,13 +57,19 @@ async def backup(ctx):
         await level_bot.send_message(ctx.message.channel, 'Backed up all user stars to "stars.txt".')
         print('Backed up all user stars for server {} to "stars.txt".'.format(ctx.message.server))
     else:
-        await level_bot.send_message(ctx.message.author, 'You do not have permission to backup stars for this server "{}".'.format(ctx.message.server))
+        await level_bot.send_message(ctx.message.author, 'You do not have permission to backup stars for server "{}".'.format(ctx.message.server))
 
 @level_bot.command(pass_context=True)
-async def set_nicknames(ctx):
-    for key in player_stars:
-        name = get_username(ctx,key)
-        await level_bot.send_message(ctx.message.channel, name.mention)
+async def update_nicknames(ctx):
+    await level_bot.delete_message(ctx.message)
+    run = check_for_role(ctx)
+    if run:
+        for key in player_stars:
+            name_object = get_username(ctx,key)
+            old_name = name_object.display_name
+            new_name = old_name + ' ({})'.format(player_stars[key])
+    else:
+        await level_bot.send_message(ctx.message.author, 'You do not have permission to update nicknames for server "{}".'.format(ctx.message.server))
         
 @level_bot.command(pass_context=True)
 async def give_stars(ctx,*args):
