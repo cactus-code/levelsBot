@@ -69,6 +69,7 @@ async def update_nicknames(ctx):
             name_object = get_username(ctx,key)
             old_name = name_object.name
             new_name = old_name + ' ({})'.format(player_stars[key])
+            await level_bot.change_nickname(name_object,new_name)
             num = num + 1
         print('Updated "{}" users with their star count on server: "{}"'.format(num,ctx.message.server))
     else:
