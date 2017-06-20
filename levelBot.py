@@ -64,10 +64,13 @@ async def update_nicknames(ctx):
     await level_bot.delete_message(ctx.message)
     run = check_for_role(ctx)
     if run:
+        num = 0
         for key in player_stars:
             name_object = get_username(ctx,key)
             old_name = name_object.name
             new_name = old_name + ' ({})'.format(player_stars[key])
+            num = num + 1
+        print('Updated "{}" users with their star count on server: "{}"'.format(num,ctx.message.server))
     else:
         await level_bot.send_message(ctx.message.author, 'You do not have permission to update nicknames for server "{}".'.format(ctx.message.server))
         
