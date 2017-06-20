@@ -92,13 +92,15 @@ async def give_stars(ctx,*args):
                     num = num + 1
                     player_stars[key] = int(player_stars[key]) + int(args[1])
                     await level_bot.send_message(ctx.message.channel, 'User "{}" now has {} :stars: ({}{}).'.format(key,player_stars[key],operator,args[1]))
-                    print("Gave {}{} stars to user with ID: {}".format(operator,args[1],args[0]))
+                    name_object = get_username(ctx,key)
+                    print("Gave {}{} stars to user: {}".format(operator,args[1],name_object.name))
             if num == 0:
                 user = str(args[0])
                 stars = 0 + int(args[1])
                 player_stars[user] = stars
                 await level_bot.send_message(ctx.message.channel, 'User "{}" was added to the list with {} :stars: (+{}).'.format(args[0],args[1],args[1]))
-                print('Added user with ID: {} to star list with {} stars.'.format(args[0],args[1]))
+                name_object = get_username(ctx,user)
+                print('Added user: {} to star list with {} stars.'.format(name_object.name,args[1]))
         except:
             await level_bot.send_message(ctx.message.channel, 'Invalid number. Please enter a valid user and a number of stars.')
     else:
@@ -118,7 +120,8 @@ async def list_stars(ctx,*args):
                 for key in player_stars:
                     if key == args[0]:
                         await level_bot.send_message(ctx.message.channel, 'User "{}" has {} :stars:.'.format(key,player_stars[key]))
-                        print('Sent number of stars for user with ID: {} to server: {}.'.format(args[0],ctx.message.server))
+                        name_object = get_username(ctx,key)
+                        print('Sent number of stars for user: {} to server: {}.'.format(name_object.name,ctx.message.server))
                         return None
                 user = args[0]
                 await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
@@ -147,7 +150,8 @@ async def clear_stars(ctx,*args):
             try:
                 del player_stars[args[0]]
                 await level_bot.send_message(ctx.message.channel, 'Deleted :stars: for user "{}".'.format(args[0]))
-                print('Deleted stars for user with ID: {} on server: {}.'.format(args[0],ctx.message.server))
+                name_object = get_username(ctx,key)
+                print('Deleted stars for user: {} on server: {}.'.format(args[0],ctx.message.server))
             except:
                 await level_bot.send_message(ctx.message.channel, 'User "{}" was not found.'.format(args[0]))
     else:
