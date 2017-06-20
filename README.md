@@ -9,5 +9,4 @@ Features in Early Testing (working features, but still in development):
 
 Features Coming Soon (features closer to the top will be worked on first):
 
-- Change print statements to include users name and discriminator not ID
 - Add support for multiple servers (multiple txt files and python files)
