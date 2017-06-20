@@ -98,7 +98,7 @@ async def give_stars(ctx,*args):
                 user = str(args[0])
                 stars = 0 + int(args[1])
                 player_stars[user] = stars
-                await level_bot.send_message(ctx.message.channel, 'User "{}" was added to the list with {} :stars: (+{}).'.format(args[0],args[1],args[1]))
+                await level_bot.send_message(ctx.message.channel, 'User "{}" was added to the list with {} :stars: ({}{}).'.format(args[0],args[1],operator,args[1]))
                 name_object = get_username(ctx,user)
                 print('Added user: {} to star list with {} stars.'.format(name_object.name,args[1]))
         except:
@@ -150,8 +150,8 @@ async def clear_stars(ctx,*args):
             try:
                 del player_stars[args[0]]
                 await level_bot.send_message(ctx.message.channel, 'Deleted :stars: for user "{}".'.format(args[0]))
-                name_object = get_username(ctx,key)
-                print('Deleted stars for user: {} on server: {}.'.format(args[0],ctx.message.server))
+                name_object = get_username(ctx,args[0])
+                print('Deleted stars for user: {} on server: {}.'.format(name_object.name,ctx.message.server))
             except:
                 await level_bot.send_message(ctx.message.channel, 'User "{}" was not found.'.format(args[0]))
     else:
