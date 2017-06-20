@@ -113,7 +113,7 @@ async def list_stars(ctx,*args):
                 await level_bot.send_message(ctx.message.author,'Stars for server {}:'.format(ctx.message.server))
                 for key in player_stars:
                     await level_bot.send_message(ctx.message.author,key + ' : ' + player_stars[key])
-                    print('Sent list of all user stars for server: {} to user: {}.'.format(ctx.message.server,ctx.message.author))
+                print('Sent list of all user stars for server: {} to user: {}.'.format(ctx.message.server,ctx.message.author))
             else:
                 for key in player_stars:
                     if key == args[0]:
