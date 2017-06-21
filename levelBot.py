@@ -28,13 +28,15 @@ def get_username(ctx,key):
     return user_name
 
 def get_stars_string(ctx):
-    string = 'Stars for server {}:'.format(ctx.message.server) + "\n"
+    string_list = []
     string = string + "```" + "\n"
+    string_list.append(string)
     for key in player_stars:
-        name_object = get_username(ctx,key)
-        string = string + name_object.display_name + " : " + player_stars[key] + "\n"
+        if len(string) < 1900:
+            name_object = get_username(ctx,key)
+            string = string + name_object.display_name + " : " + player_stars[key] + "\n"
     string = string + "```"
-    return string
+    return string_list
 
 @level_bot.event
 async def on_ready():
@@ -122,6 +124,8 @@ async def list_stars(ctx,*args):
         if player_stars:
             if args[0].lower() == "all":
                 string_list = get_stars_string(ctx)
+                opening_message = 'Stars for server {}:'.format(ctx.message.server)
+                await level_bot.send_message(ctx.message.author,opening_message)
                 for string in string_list:
                     await level_bot.send_message(ctx.message.author,string)
                 print('Sent list of all user stars for server: {} to user: {}.'.format(ctx.message.server,ctx.message.author))
