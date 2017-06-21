@@ -4,7 +4,6 @@ A Discord bot written in Python 3.5.2, that allows you to give users stars (or l
 
 Features in Early Testing (working features, but still in development):
 
-- Add command to view the entire list of stars for a server (currently spams the user with message notifications on large servers)
 - Changing peoples nicknames with their star count in brackets (currently only works with default usernames not nicknames. Has to be triggered by a command, however this will be automatic in the future, with a option to toggle off the star count nicknames. Also, this command cannot change users' nicknames with Administrator on their role who are above the bot's role in the role hierachy.)
 
 Features Coming Soon (features closer to the top will be worked on first):
