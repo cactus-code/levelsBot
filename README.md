@@ -9,4 +9,5 @@ Features in Early Testing (working features, but still in development):
 
 Features Coming Soon (features closer to the top will be worked on first):
 
+- Live updating to .txt files (no more using ?backup or ?shutdown to save stars. This saves alot of hassle in the future)
 - Add support for multiple servers (multiple txt files and python files)
