@@ -27,6 +27,12 @@ def get_username(ctx,key):
     user_name = discord.utils.get(ctx.message.server.members, id=key)
     return user_name
 
+def get_stars_string():
+    string = ""
+    for key in player_stars:
+        string = string + key + " : " + player_stars[key] + "\n"
+    return string
+
 @level_bot.event
 async def on_ready():
     #This runs when the bot boots up
@@ -113,8 +119,8 @@ async def list_stars(ctx,*args):
         if player_stars:
             if args[0].lower() == "all":
                 await level_bot.send_message(ctx.message.author,'Stars for server {}:'.format(ctx.message.server))
-                for key in player_stars:
-                    await level_bot.send_message(ctx.message.author,key + ' : ' + player_stars[key])
+                string = get_stars_string()
+                await level_bot.send_message(ctx.message.author,string)
                 print('Sent list of all user stars for server: {} to user: {}.'.format(ctx.message.server,ctx.message.author))
             else:
                 for key in player_stars:
