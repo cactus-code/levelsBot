@@ -37,6 +37,7 @@ def get_stars_string(ctx):
         else:
             string_list.append(string)
             string = ""
+    string_list.append(string)
     return string_list
 
 @level_bot.event
