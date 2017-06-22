@@ -32,13 +32,16 @@ def get_stars_string(ctx):
     string = ""
     for key in player_stars:
         if len(string) < 1900:
+            need_append = True
             name_object = get_username(ctx,key)
             string = string + name_object.display_name + " : " + player_stars[key] + "\n"
         else:
+            need_append = False
             string = string + name_object.display_name + " : " + player_stars[key] + "\n"
             string_list.append(string)
             string = ""
-    string_list.append(string)
+    if need_append:
+        string_list.append(string)
     return string_list
 
 @level_bot.event
