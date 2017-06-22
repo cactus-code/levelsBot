@@ -127,9 +127,9 @@ async def list_stars(ctx,*args):
                 string_list = get_stars_string(ctx)
                 opening_message = 'Stars for server {}:'.format(ctx.message.server)
                 await level_bot.send_message(ctx.message.author,opening_message)
-                break = "```" + "\n"
+                code_identifier = "```" + "\n"
                 for string in string_list:
-                    await level_bot.send_message(ctx.message.author,break + string + break)
+                    await level_bot.send_message(ctx.message.author,code_identifier + string + code_identifier)
                 print('Sent list of all user stars for server: {} to user: {}.'.format(ctx.message.server,ctx.message.author))
             else:
                 for key in player_stars:
