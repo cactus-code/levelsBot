@@ -24,7 +24,7 @@ def get_username(ctx,key):
     key = key.replace('<','')
     key = key.replace('@','')
     key = key.replace('>','')
-    user_name = discord.utils.get(ctx.message.server.members, id=key)
+    user_name = ctx.message.server.get_member(key)
     return user_name
 
 def get_stars_string(ctx):
@@ -126,34 +126,34 @@ async def give_stars(ctx,*args):
 @level_bot.command(pass_context=True)
 async def list_stars(ctx,*args):
     await level_bot.delete_message(ctx.message)
-    try:
-        if player_stars:
-            if args[0].lower() == "all":
-                string_list = get_stars_string(ctx)
-                opening_message = 'Stars for server {}:'.format(ctx.message.server)
-                await level_bot.send_message(ctx.message.author,opening_message)
-                code_identifier = "```" + "\n"
-                for string in string_list:
-                    await level_bot.send_message(ctx.message.author,code_identifier + string + code_identifier)
-                print('Sent list of all user stars for server: {} to user: {}.'.format(ctx.message.server,ctx.message.author))
-            else:
-                for key in player_stars:
-                    if key == args[0]:
-                        await level_bot.send_message(ctx.message.channel, 'User "{}" has {} :stars:.'.format(key,player_stars[key]))
-                        name_object = get_username(ctx,key)
-                        print('Sent number of stars for user: {} to server: {}.'.format(name_object.name,ctx.message.server))
-                        return None
-                user = args[0]
-                await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
+    #try:
+    if player_stars:
+        if args[0].lower() == "all":
+            string_list = get_stars_string(ctx)
+            opening_message = 'Stars for server {}:'.format(ctx.message.server)
+            await level_bot.send_message(ctx.message.author,opening_message)
+            code_identifier = "```" + "\n"
+            for string in string_list:
+                await level_bot.send_message(ctx.message.author,code_identifier + string + code_identifier)
+            print('Sent list of all user stars for server: {} to user: {}.'.format(ctx.message.server,ctx.message.author))
         else:
-            if args[0].lower() == "all":
-                await level_bot.send_message(ctx.message.author, 'There are no users on the star list for server {}.'.format(ctx.message.server))
-            else:
-                message = ctx.message.content
-                user = message.replace('?list_stars ','')
-                await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
-    except:
-        await level_bot.send_message(ctx.message.channel, 'User was not given. Please specify the user after the "?list_stars" command. Alternatively you can type "?list_stars all" to see the full star list for that server.')
+            for key in player_stars:
+                if key == args[0]:
+                    await level_bot.send_message(ctx.message.channel, 'User "{}" has {} :stars:.'.format(key,player_stars[key]))
+                    name_object = get_username(ctx,key)
+                    print('Sent number of stars for user: {} to server: {}.'.format(name_object.name,ctx.message.server))
+                    return None
+            user = args[0]
+            await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
+    else:
+        if args[0].lower() == "all":
+            await level_bot.send_message(ctx.message.author, 'There are no users on the star list for server {}.'.format(ctx.message.server))
+        else:
+            message = ctx.message.content
+            user = message.replace('?list_stars ','')
+            await level_bot.send_message(ctx.message.channel, 'User "{}" is not registered for the :stars: list.'.format(user))
+ #   except:
+ #       await level_bot.send_message(ctx.message.channel, 'User was not given. Please specify the user after the "?list_stars" command. Alternatively you can type "?list_stars all" to see the full star list for that server.')
         
 @level_bot.command(pass_context=True)
 async def clear_stars(ctx,*args):
