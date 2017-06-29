@@ -33,7 +33,7 @@ def get_stars_string(ctx):
     for key in player_stars:
         try:
             if len(string) < 1900:
-               need_append = True
+                need_append = True
                 name_object = get_username(ctx,key)
                 string = string + name_object.display_name + " : " + player_stars[key] + "\n"
             else:
