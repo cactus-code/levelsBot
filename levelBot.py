@@ -24,22 +24,25 @@ def get_username(ctx,key):
     key = key.replace('<','')
     key = key.replace('@','')
     key = key.replace('>','')
-    user_name = ctx.message.server.get_member(key)
+    user_name = discord.utils.get(ctx.message.server.members, id=key)
     return user_name
 
 def get_stars_string(ctx):
     string_list = []
     string = ""
     for key in player_stars:
-        if len(string) < 1900:
-            need_append = True
-            name_object = get_username(ctx,key)
-            string = string + name_object.display_name + " : " + player_stars[key] + "\n"
-        else:
-            need_append = False
-            string = string + name_object.display_name + " : " + player_stars[key] + "\n"
-            string_list.append(string)
-            string = ""
+        try:
+            if len(string) < 1900:
+                need_append = True
+                name_object = get_username(ctx,key)
+                string = string + name_object.display_name + " : " + player_stars[key] + "\n"
+            else:
+                need_append = False
+                string = string + name_object.display_name + " : " + player_stars[key] + "\n"
+                string_list.append(string)
+                string = ""
+        except:
+            pass
     if need_append:
         string_list.append(string)
     return string_list
